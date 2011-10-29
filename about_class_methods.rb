@@ -19,7 +19,7 @@ class AboutClassMethods < EdgeCase::Koan
 
   def test_objects_have_methods
     fido = Dog.new
-    puts fido.methods.size
+    # puts fido.methods(falsse).size
     assert fido.methods.size > 3
   end
 
