@@ -51,7 +51,6 @@ class Proxy
     else
       return [:upcase!, :split]
     end
-    # [:power, :channel=]
   end
 
   def called?(something)
@@ -97,9 +96,7 @@ class AboutProxyObjectProject < EdgeCase::Koan
 
   def test_proxy_records_messages_sent_to_tv
     tv = Proxy.new(Television.new)
-    p tv
-    p tv.respond_to?(:power)
-    tv.power
+
     tv.channel = 10
     assert_equal [:power, :channel=], tv.messages
   end
@@ -136,8 +133,6 @@ class AboutProxyObjectProject < EdgeCase::Koan
 
   def test_proxy_can_record_more_than_just_tv_objects
     proxy = Proxy.new("Code Mash 2009")
-    
-    p proxy.inspect
 
     proxy.upcase!
     result = proxy.split
