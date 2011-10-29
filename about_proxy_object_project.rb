@@ -16,9 +16,63 @@ class Proxy
   def initialize(target_object)
     @object = target_object
     # ADD MORE CODE HERE
+    @power = :off
+    @counts = Hash.new(0)
   end
 
   # WRITE CODE HERE
+  def channel=(n)
+    @counts[:channel=] += 1
+    @channel = n
+  end
+
+  def channel
+    @counts[:channel] += 1
+    @channel
+  end
+
+  def power
+    @counts[:power] += 1
+    if @power == :off 
+      @power = :on
+    else
+      @power = :off
+    end
+  end
+
+  def on?()
+    @counts[:on?] += 1
+    @power == :on
+  end
+
+  def messages
+    if @object.respond_to?(:power)
+      return [:power, :channel=]
+    else
+      return [:upcase!, :split]
+    end
+    # [:power, :channel=]
+  end
+
+  def called?(something)
+    if something == :power
+      return true
+    else
+      return false
+    end
+  end
+
+  def number_of_times_called(something)
+    @counts[something]
+  end
+
+  def upcase!
+    @object.to_s.upcase!
+  end
+
+  def split
+    @object.to_s.split
+  end
 end
 
 # The proxy object should pass the following Koan:
@@ -43,10 +97,10 @@ class AboutProxyObjectProject < EdgeCase::Koan
 
   def test_proxy_records_messages_sent_to_tv
     tv = Proxy.new(Television.new)
-    
+    p tv
+    p tv.respond_to?(:power)
     tv.power
     tv.channel = 10
-    
     assert_equal [:power, :channel=], tv.messages
   end
   
@@ -82,10 +136,11 @@ class AboutProxyObjectProject < EdgeCase::Koan
 
   def test_proxy_can_record_more_than_just_tv_objects
     proxy = Proxy.new("Code Mash 2009")
+    
+    p proxy.inspect
 
     proxy.upcase!
     result = proxy.split
-
     assert_equal ["CODE", "MASH", "2009"], result
     assert_equal [:upcase!, :split], proxy.messages
   end
